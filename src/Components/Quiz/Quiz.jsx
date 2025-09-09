@@ -1,14 +1,15 @@
-import {useState, useRef} from 'react'
-import './Quiz.css'
-import {data} from '../../assets/data'
+import { useState, useRef } from "react";
+import "./Quiz.css";
+import { data } from "../../assets/data";
 
 const Quiz = () => {
-
-  let [index, setIndex] =useState(0);
+  let [index, setIndex] = useState(0);
   let [question, setQuestion] = useState(data[0]);
   let [lock, setLock] = useState(false);
   let [score, setScore] = useState(0);
-  let [result , setResult] = useState(false);
+  let [result, setResult] = useState(false);
+  let [name, setName] = useState("");
+  let [hasStarted, setHasStarted] = useState(false);
 
   let Option1 = useRef(null);
   let Option2 = useRef(null);
@@ -18,27 +19,22 @@ const Quiz = () => {
   let option_array = [Option1, Option2, Option3, Option4];
 
   const checkAns = (e, ans) => {
-    if(lock === false) {
-
-       if (question.ans===ans) {
-      e.target.classList.add("correct");
-      setLock(true);
-      setScore(prev=> prev+1);
+    if (lock === false) {
+      if (question.ans === ans) {
+        e.target.classList.add("correct");
+        setLock(true);
+        setScore((prev) => prev + 1);
+      } else {
+        e.target.classList.add("wrong");
+        setLock(true);
+        option_array[question.ans - 1].current.classList.add("correct");
+      }
     }
-    else{
-      e.target.classList.add("wrong");
-      setLock(true);
-      option_array[question.ans-1].current.classList.add("correct");
-
-    }
-
-    }
-   
-  }
+  };
 
   const next = () => {
-    if (lock===true) {
-      if(index===data.length-1) {
+    if (lock === true) {
+      if (index === data.length - 1) {
         setResult(true);
         return 0;
       }
@@ -49,7 +45,7 @@ const Quiz = () => {
         setIndex(newIndex);
         setQuestion(data[newIndex]);
         setLock(false);
-        option_array.forEach(option => {
+        option_array.forEach((option) => {
           option.current.classList.remove("correct");
           option.current.classList.remove("wrong");
         });
@@ -63,29 +59,80 @@ const Quiz = () => {
     setLock(false);
     setScore(0);
     setResult(false);
-  }
+    setHasStarted(false); 
+    setName("");
+  };
+
+  const startQuiz = () => {
+    if (name.trim() !== "") {
+      setHasStarted(true);
+    } else {
+      alert("Please enter your name to start the quiz.");
+    }
+  };
 
   return (
-    <div className='container'>
-        <h1>Kingsley Quiz App</h1>
-        <hr />
-        {result? <></>:<>
-             <h2> {index+1}. {question.question}</h2>
-        <ul>
-            <li ref={Option1} onClick={(e) => {checkAns(e, 1)}}>{question.option1}</li>
-            <li ref={Option2} onClick={(e) => {checkAns(e, 2)}}>{question.option2}</li>
-            <li ref={Option3} onClick={(e) => {checkAns(e, 3)}}>{question.option3}</li>
-            <li ref={Option4} onClick={(e) => {checkAns(e, 4)}}>{question.option4}</li>
-        </ul>
-        <button onClick={next}>Next</button>
-        <div className='index'> {index + 1} of {data.length} questions</div>
-        </>}
-        {result?<>
-         <h2>You Scored {score} out of {data.length}</h2>
-        <button onClick={reset}>Reset</button>
-        </>:<></>}
+    <div className="container">
+      <h1>Kingsley Quiz App</h1>
+      <hr />
+
+      
+      {!hasStarted ? (
+        <div className="welcome-screen">
+          <h2>Welcome to my Quiz App</h2>
+          <p>Please enter your name to start:</p>
+          <input
+            type="text"
+            placeholder="Your Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                startQuiz();
+              }
+            }}
+          />
+          <button onClick={startQuiz}>Start Quiz</button>
+        </div>
+      ) : (
+        <>
+          
+          {result ? (
+            <>
+              <h2>
+                {name}, <br /> You scored {score} out of {data.length} 
+              </h2>
+              <button onClick={reset}>Reset</button>
+            </>
+          ) : (
+            <>
+              <h2>
+                {index + 1}. {question.question}
+              </h2>
+              <ul>
+                <li ref={Option1} onClick={(e) => checkAns(e, 1)}>
+                  {question.option1}
+                </li>
+                <li ref={Option2} onClick={(e) => checkAns(e, 2)}>
+                  {question.option2}
+                </li>
+                <li ref={Option3} onClick={(e) => checkAns(e, 3)}>
+                  {question.option3}
+                </li>
+                <li ref={Option4} onClick={(e) => checkAns(e, 4)}>
+                  {question.option4}
+                </li>
+              </ul>
+              <button onClick={next}>Next</button>
+              <div className="index">
+                {index + 1} of {data.length} questions
+              </div>
+            </>
+          )}
+        </>
+      )}
     </div>
   );
-}
+};
 
-export default Quiz
+export default Quiz;

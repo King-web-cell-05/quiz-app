@@ -11,6 +11,31 @@
     padding: 40px 50px;
 
 }
+.welcome-screen{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+}
+
+.welcome-screen h2{
+    font-size: 50px;
+    font-weight: 600;
+}
+.welcome-screen p{
+    font-size: 18px;
+    font-weight: 500;
+}
+.welcome-screen input{
+    width: 80%;
+    height: 50px;
+    font-size: 20px;
+    padding-left: 15px;
+    border-radius: 8px;
+    border: 1px solid gray;
+    margin: auto;
+}
+
 .container hr{
     height: 2px;
     border: none;
@@ -48,7 +73,7 @@
 .container .index{
     margin: auto;
     font-size: 18px;
-    font-family: poppins;
+    font-family: poppins;   
 
 }
 
