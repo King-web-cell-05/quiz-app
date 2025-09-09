@@ -1,7 +1,7 @@
 export const data = [
     {
       question: "What is React primarily used for?",
-      option1: "Database managemen",
+      option1: "Database management",
       option2: "Building user interfaces",
       option3: "Server-side scripting",
       option4: "Mobile device management",
