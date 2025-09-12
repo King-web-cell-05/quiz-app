@@ -19,39 +19,49 @@ const Quiz = () => {
   let option_array = [Option1, Option2, Option3, Option4];
 
   const checkAns = (e, ans) => {
-    if (lock === false) {
-      if (question.ans === ans) {
-        e.target.classList.add("correct");
-        setLock(true);
-        setScore((prev) => prev + 1);
-      } else {
-        e.target.classList.add("wrong");
-        setLock(true);
+  if (!lock) {
+    if (question.ans === ans) {
+      e.target.classList.add("correct");
+      setScore((prev) => prev + 1);
+    } else {
+      e.target.classList.add("wrong");
+      if (
+        typeof question.ans === "number" &&
+        question.ans >= 1 &&
+        question.ans <= 4
+      ) {
         option_array[question.ans - 1].current.classList.add("correct");
       }
     }
-  };
 
-  const next = () => {
-    if (lock === true) {
-      if (index === data.length - 1) {
-        setResult(true);
-        return 0;
-      }
+    
+    option_array.forEach((option) => {
+      option.current.classList.add("disabled");
+    });
+
+    setLock(true);
+  }
+};
+
+const next = () => {
+  if (lock) {
+    if (index === data.length - 1) {
+      setResult(true);
+      return;
     }
-    if (lock === true) {
-      const newIndex = index + 1;
-      if (newIndex < data.length) {
-        setIndex(newIndex);
-        setQuestion(data[newIndex]);
-        setLock(false);
-        option_array.forEach((option) => {
-          option.current.classList.remove("correct");
-          option.current.classList.remove("wrong");
-        });
-      }
+
+    const newIndex = index + 1;
+    if (newIndex < data.length) {
+      setIndex(newIndex);
+      setQuestion(data[newIndex]);
+      setLock(false);
+
+      option_array.forEach((option) => {
+        option.current.classList.remove("correct", "wrong", "disabled");
+      });
     }
-  };
+  }
+};
 
   const reset = () => {
     setIndex(0);

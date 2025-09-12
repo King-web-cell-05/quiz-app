@@ -56,7 +56,20 @@
     border-radius: 8px;
     margin-bottom: 20px;
     cursor: pointer;
+     transition: all 0.3s ease;
 
+}
+
+.container ul li:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  border-color: #553f9a;
+}
+.container ul li.disabled {
+  pointer-events: none;   
+  transform: none !important;
+  box-shadow: none !important;
+  cursor: default;
 }
 
 .container button {
@@ -69,6 +82,11 @@
     font-weight: 500;
     border-radius: 8px;
     cursor: pointer;
+      background: linear-gradient(45deg, #553f9a, #7a5df2);
+  transition: all 0.4s ease;
+}
+.container button:hover {
+      background: linear-gradient(45deg, #7a5df2, #553f9a);
 }
 .container .index{
     margin: auto;
